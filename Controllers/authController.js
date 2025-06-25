@@ -16,8 +16,7 @@ const registerUser = async(req, res)=>{
             password,
             role
         })
-
-        res.status(201).json({
+         res.status(201).json({
             message :" Registered Successfully",
             data : user
         })
@@ -30,5 +29,32 @@ const registerUser = async(req, res)=>{
     }
 }
 
+const loginUser = async(req, res)=>{
+    try {
+        const {email, password} = req.body;
+        if (!email || !password) {
+            return res.status(501).json({message: "All feilds are required!"});
+        }
 
-module.exports = {registerUser}
+        const isExist = await Auth.findOne({
+            email
+        })
+        if(!isExist){
+            res.status(404).json({
+                message: 'Register Yourself first'
+            })
+        }
+
+        res.status(201).json({
+            message: "You Are Logged In", 
+            data : isExist
+        })
+    } catch (error) {
+        res.status(500).json({
+            error: error.message
+        })
+    }
+}
+
+
+module.exports = {registerUser, loginUser}
