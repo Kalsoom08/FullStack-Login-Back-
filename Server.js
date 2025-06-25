@@ -5,8 +5,11 @@ const path = require('path');
 const app = express();
 const connect = require('./Config/connect')
 connect()
+app.use(express.json())
 
+const authRoutes = require('./Routes/authRoute')
 
+app.use('/api/user', authRoutes)
 
 
 const port = 4000;
