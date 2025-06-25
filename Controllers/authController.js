@@ -1,4 +1,5 @@
 const Auth = require('../Models/authModel')
+const {signToken} = require('../Utils/JWTGenerator')
 
 const registerUser = async(req, res)=>{
     try {
@@ -44,10 +45,12 @@ const loginUser = async(req, res)=>{
                 message: 'Register Yourself first'
             })
         }
-
+ 
+        const token = signToken({id : isExist._id, role: isExist.role})
         res.status(201).json({
             message: "You Are Logged In", 
-            data : isExist
+            data : isExist,
+            token
         })
     } catch (error) {
         res.status(500).json({
