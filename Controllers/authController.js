@@ -1,5 +1,7 @@
 const Auth = require('../Models/authModel')
 const {signToken} = require('../Utils/JWTGenerator')
+const hashPassword = require('../Utils/hashPassword');
+const comparePassword = require('../Utils/comparePassword.js');
 
 const registerUser = async(req, res)=>{
     try {
@@ -11,10 +13,11 @@ const registerUser = async(req, res)=>{
             });
         }
 
+        const hashedPassword = await hashPassword(password)
         const user = await Auth.create({
             userName,
             email,
-            password,
+            password: hashedPassword,
             role
         })
          res.status(201).json({
@@ -45,7 +48,12 @@ const loginUser = async(req, res)=>{
                 message: 'Register Yourself first'
             })
         }
- 
+        const isPasswordMatch = await comparePassword(password, isExist.password);
+        if (!isPasswordMatch) {
+            return res.json(501).json({
+                message: "Incorrect Password!"
+            });
+        }
         const token = signToken({id : isExist._id, role: isExist.role})
         res.status(201).json({
             message: "You Are Logged In", 
