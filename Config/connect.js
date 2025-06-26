@@ -12,4 +12,4 @@ try {
 }
 }
 
-module.exports = connect
+module.exports = connect;

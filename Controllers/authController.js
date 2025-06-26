@@ -2,7 +2,7 @@ const Auth = require('../Models/authModel')
 
 const registerUser = async(req, res)=>{
     try {
-        const {userName, email, password, role} = req.body;
+        const {userName, email, password, role = 'public'} = req.body;
 
             if (!userName || !email || !password || !role) {
             return res.status(400).json({
